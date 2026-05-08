@@ -1,0 +1,16 @@
+{
+  "name": "saturday-planner-1",
+  "version": "1.0.0",
+  "description": "Perfect Saturday Planner agent web app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
