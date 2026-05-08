@@ -42,8 +42,13 @@ function renderResult(data) {
     ? `<ul>${data.tradeOffs.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>`
     : '<p>No major trade-offs needed.</p>';
 
+  const location = data.location && data.location.coordinates?.length === 2
+    ? `<p><strong>Detected city:</strong> ${escapeHtml(data.location.label)} (${data.location.coordinates[1].toFixed(4)}, ${data.location.coordinates[0].toFixed(4)})</p>`
+    : '';
+
   resultBox.innerHTML = `
     <h2>Your Saturday plan</h2>
+    ${location}
     ${warnings}
     <ol>${planHtml}</ol>
     <p><strong>Estimated total cost:</strong> ₹${data.summary.estimatedTotalCost}</p>
@@ -62,17 +67,28 @@ function renderResult(data) {
 }
 
 async function requestPlan(payload) {
+  const buttons = Array.from(document.querySelectorAll('button'));
+  buttons.forEach(btn => { btn.disabled = true; });
   resultBox.classList.remove('hidden');
   resultBox.innerHTML = '<p>Agent is thinking...</p>';
+  try {
+    const response = await fetch('/api/plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-  const response = await fetch('/api/plan', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-
-  const data = await response.json();
-  renderResult(data);
+    const data = await response.json();
+    renderResult(data);
+  } catch (_error) {
+    renderResult({
+      success: false,
+      clarifyingQuestions: ['Please retry in a few seconds.'],
+      trace: [{ tool: 'requestPlan', status: 'failed', details: 'Network error while requesting plan.' }]
+    });
+  } finally {
+    buttons.forEach(btn => { btn.disabled = false; });
+  }
 }
 
 structuredForm.addEventListener('submit', async (event) => {

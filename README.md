@@ -23,10 +23,13 @@ Perfect Saturday Planner is a small AI-style agent web app.
 
 ```bash
 npm install
+export GEOCODE_EARTH_API_KEY=your_api_key_here
 npm start
 ```
 
 Open `http://localhost:3000`.
+
+> The planner enriches city input using Geocode Earth (`https://api.geocode.earth/v1/search`) when `GEOCODE_EARTH_API_KEY` is set.
 
 ## Test
 
