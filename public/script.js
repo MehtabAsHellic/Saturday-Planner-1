@@ -15,10 +15,11 @@ function renderResult(data) {
   resultBox.classList.remove('hidden');
 
   if (!data.success) {
+    const message = data.message ? `<p>${escapeHtml(data.message)}</p>` : "<p>I couldn't confidently create a plan yet.</p>";
     const questions = (data.clarifyingQuestions || []).map(q => `<li>${escapeHtml(q)}</li>`).join('');
     resultBox.innerHTML = `
       <h2>Need a little more info</h2>
-      <p>I couldn't confidently create a plan yet.</p>
+      ${message}
       <ul>${questions}</ul>
       <h3>Trace</h3>
       <pre>${escapeHtml(JSON.stringify(data.trace, null, 2))}</pre>
@@ -83,7 +84,8 @@ async function requestPlan(payload) {
   } catch (_error) {
     renderResult({
       success: false,
-      clarifyingQuestions: ['Please retry in a few seconds.'],
+      message: 'Network error while requesting plan. Please retry in a few seconds.',
+      clarifyingQuestions: [],
       trace: [{ tool: 'requestPlan', status: 'failed', details: 'Network error while requesting plan.' }]
     });
   } finally {

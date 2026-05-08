@@ -46,7 +46,7 @@ app.post('/api/plan', async (req, res) => {
       try {
         location = await geocodeCity(result.preferences.city);
       } catch (error) {
-        result.warnings = [...(result.warnings || []), 'Could not validate city location right now.'];
+        result.warnings = [...(result.warnings || []), 'City location lookup unavailable; continuing without geocoding.'];
         result.trace = [...(result.trace || []), { tool: 'geocodeCity', status: 'failed', details: error.message }];
       }
     }
