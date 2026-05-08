@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfect Saturday Planner</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Perfect Saturday Planner</h1>
+      <p>Tell me your city, budget, time, mood, interests, and constraints.</p>
+
+      <section class="card">
+        <h2>Structured input</h2>
+        <form id="structured-form">
+          <label>City <input name="city" value="Bangalore" required /></label>
+          <label>Budget (₹) <input name="budget" type="number" value="2000" required /></label>
+          <label>Available time <input name="available_time" value="4 hours" required /></label>
+          <label>Mood <input name="mood" value="tired but wants to do something fun" required /></label>
+          <label>Interests (comma separated) <input name="interests" value="food, music, walks" /></label>
+          <label>Constraints (comma separated) <input name="constraints" value="vegetarian, avoid crowded places" /></label>
+          <button type="submit">Generate plan</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Or free text</h2>
+        <form id="free-form">
+          <textarea name="input" rows="4" placeholder="I'm in Bangalore, budget 2000, 4 hours, tired but want fun, like food music walks, vegetarian and avoid crowded places"></textarea>
+          <button type="submit">Generate from free text</button>
+        </form>
+      </section>
+
+      <section id="result" class="card hidden"></section>
+    </main>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
