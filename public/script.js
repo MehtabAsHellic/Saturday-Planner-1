@@ -11,6 +11,8 @@ function escapeHtml(str) {
     .replaceAll("'", '&#39;');
 }
 
+const NETWORK_ERROR_MESSAGE = 'Network error while requesting plan. Please retry in a few seconds.';
+
 function renderResult(data) {
   resultBox.classList.remove('hidden');
 
@@ -81,12 +83,12 @@ async function requestPlan(payload) {
 
     const data = await response.json();
     renderResult(data);
-  } catch (_error) {
+  } catch (error) {
     renderResult({
       success: false,
-      message: 'Network error while requesting plan. Please retry in a few seconds.',
+      message: NETWORK_ERROR_MESSAGE,
       clarifyingQuestions: [],
-      trace: [{ tool: 'requestPlan', status: 'failed', details: 'Network error while requesting plan.' }]
+      trace: [{ tool: 'requestPlan', status: 'failed', details: error?.message || NETWORK_ERROR_MESSAGE }]
     });
   } finally {
     buttons.forEach(btn => { btn.disabled = false; });

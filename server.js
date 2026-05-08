@@ -18,7 +18,7 @@ async function geocodeCity(city) {
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Geocoding failed with status ${response.status}`);
+    throw new Error(`Geocoding failed with status ${response.status} ${response.statusText}`);
   }
 
   const data = await response.json();
@@ -43,11 +43,15 @@ app.post('/api/plan', async (req, res) => {
     }
     let location = null;
     if (result.preferences?.city) {
-      try {
-        location = await geocodeCity(result.preferences.city);
-      } catch (error) {
-        result.warnings = [...(result.warnings || []), 'City location lookup unavailable; continuing without geocoding.'];
-        result.trace = [...(result.trace || []), { tool: 'geocodeCity', status: 'failed', details: error.message }];
+      if (!GEOCODE_EARTH_API_KEY) {
+        result.warnings = [...(result.warnings || []), 'Geocoding skipped because GEOCODE_EARTH_API_KEY is not configured.'];
+      } else {
+        try {
+          location = await geocodeCity(result.preferences.city);
+        } catch (error) {
+          result.warnings = [...(result.warnings || []), 'City location lookup failed due to a geocoding API/network issue; continuing without geocoding.'];
+          result.trace = [...(result.trace || []), { tool: 'geocodeCity', status: 'failed', details: error.message }];
+        }
       }
     }
 
