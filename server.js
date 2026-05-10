@@ -43,9 +43,7 @@ app.post('/api/plan', async (req, res) => {
     }
     let location = null;
     if (result.preferences?.city) {
-      if (!GEOCODE_EARTH_API_KEY) {
-        result.warnings = [...(result.warnings || []), 'Geocoding skipped because GEOCODE_EARTH_API_KEY is not configured.'];
-      } else {
+      if (GEOCODE_EARTH_API_KEY) {
         try {
           location = await geocodeCity(result.preferences.city);
         } catch (error) {
