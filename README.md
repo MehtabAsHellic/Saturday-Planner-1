@@ -69,9 +69,19 @@ npm test
 
 ## Deploy (hosted URL)
 
-This app is deployable to services like Render, Railway, or Fly.io using:
+### Vercel
+
+A `vercel.json` is included so Vercel builds this app as a Node.js serverless function instead of attempting an Angular build.
+
+1. Import the repository in the [Vercel dashboard](https://vercel.com/new).
+2. Add the environment variable `GEOCODE_EARTH_API_KEY` under **Settings → Environment Variables** (optional — the planner works without it, but geocoding will be skipped).
+3. Deploy. No custom build command is needed; `vercel.json` handles the configuration.
+
+### Other platforms (Render, Railway, Fly.io)
+
 - Build command: `npm install`
 - Start command: `npm start`
+- Set the `GEOCODE_EARTH_API_KEY` environment variable in the platform's settings if you want geocoding.
 
 After deployment, paste the generated public URL into the "Live URL" section above.
 
